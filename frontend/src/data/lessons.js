@@ -8,6 +8,7 @@ export const lessons = [
     staff: 'A. Patel',
     category: 'Foundations',
     duration: '90 mins',
+    durationMinutes: 90,
     delivery: 'In-person',
     description: [
       'Build essential movement patterns with a focus on control, balance, and rhythm.',
@@ -24,6 +25,7 @@ export const lessons = [
     staff: 'M. Reid',
     category: 'Performance',
     duration: '75 mins',
+    durationMinutes: 75,
     delivery: 'Hybrid',
     description: [
       'Explore creative movement structures and partner drills.',
@@ -40,6 +42,7 @@ export const lessons = [
     staff: 'K. James',
     category: 'Creativity',
     duration: '60 mins',
+    durationMinutes: 60,
     delivery: 'Online',
     description: [
       'Develop flow and expression using guided prompts.',
@@ -56,6 +59,7 @@ export const lessons = [
     staff: 'R. Lewis',
     category: 'Performance',
     duration: '90 mins',
+    durationMinutes: 90,
     delivery: 'In-person',
     description: [
       'High-intensity footwork drills with precision training.',

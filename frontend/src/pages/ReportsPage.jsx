@@ -1,10 +1,13 @@
 import React from 'react';
+import Topbar from '../components/Topbar';
 
 function ReportsPage() {
   return (
     <section className="page">
-      <h1 className="page-title">Reports</h1>
-      <p className="page-subtitle">Insights and summaries.</p>
+      <Topbar 
+        title="Reports" 
+        subtitle="Insights and summaries." 
+      />
       <div className="panel">
         <p>Dummy reports page content goes here.</p>
       </div>

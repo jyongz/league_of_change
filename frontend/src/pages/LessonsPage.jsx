@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { lessons, PAGE_SIZE } from '../data/lessons';
+import Topbar from '../components/Topbar';
 
 function LessonsPage() {
   const navigate = useNavigate();
@@ -91,8 +92,10 @@ function LessonsPage() {
 
   return (
     <section className="page">
-      <h1 className="page-title">Lessons</h1>
-      <p className="page-subtitle">Your learning programs at a glance.</p>
+      <Topbar 
+        title="Lessons" 
+        subtitle="Your learning programs at a glance." 
+      />
       <div className="panel">
         <div className="table-wrap">
           <table className="lessons-table">

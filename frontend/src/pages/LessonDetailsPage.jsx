@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { lessons } from '../data/lessons';
+import Topbar from '../components/Topbar';
 
 function LessonDetailsPage() {
   const { lessonId } = useParams();
@@ -10,8 +11,10 @@ function LessonDetailsPage() {
   if (!lesson) {
     return (
       <section className="page">
-        <h1 className="page-title">Lesson Not Found</h1>
-        <p className="page-subtitle">We couldn’t find that lesson.</p>
+        <Topbar 
+          title="Lesson Not Found" 
+          subtitle="We couldn’t find that lesson." 
+        />
         <button className="ghost" onClick={() => navigate('/lessons')}>
           Back to Lessons
         </button>
@@ -21,11 +24,11 @@ function LessonDetailsPage() {
 
   return (
     <section className="page">
-      <div className="detail-header">
-        <div>
-          <h1 className="page-title">{lesson.title}</h1>
-          <p className="page-subtitle">Lesson ID: {lesson.id}</p>
-        </div>
+      <Topbar 
+        title={lesson.title} 
+        subtitle={`Lesson ID: ${lesson.id}`} 
+      />
+      <div className="detail-header-actions">
         <button className="ghost" onClick={() => navigate('/lessons')}>
           Back to Lessons
         </button>
