@@ -105,23 +105,43 @@ function LessonDetailsPage({ onMenuToggle }) {
         <div className="detail-card">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
             <h3 style={{ margin: 0 }}>Overview</h3>
-            <button className="cta-button" style={{ fontSize: '12px', padding: '6px 12px' }} onClick={() => setIsModalOpen(true)}>
-              Generate Plan
-            </button>
+            <div style={{ display: 'flex', gap: '8px' }}>
+              {(lessonOverview.length === 0 && lessonFiles.length === 0) && (
+                <button className="cta-button" style={{ fontSize: '12px', padding: '6px 12px' }} onClick={() => setIsModalOpen(true)}>
+                  Generate Plan
+                </button>
+              )}
+              <button className="ghost" style={{ fontSize: '12px', padding: '6px 12px' }} onClick={() => {}}>
+                Edit
+              </button>
+            </div>
           </div>
-          {lessonOverview.map((paragraph, index) => (
-            <p key={index}>{paragraph}</p>
-          ))}
+          {lessonOverview.length > 0 ? (
+            lessonOverview.map((paragraph, index) => (
+              <p key={index}>{paragraph}</p>
+            ))
+          ) : (
+            <p style={{ fontStyle: 'italic', color: 'var(--color-text-muted)' }}>No overview available.</p>
+          )}
         </div>
       </div>
 
       <div className="panel">
-        <h3 className="panel-title">Related Files</h3>
-        <ul className="file-list">
-          {lessonFiles.map((file) => (
-            <li key={file}>{file}</li>
-          ))}
-        </ul>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+          <h3 className="panel-title" style={{ margin: 0 }}>Related Files</h3>
+          <button className="ghost" style={{ fontSize: '12px', padding: '6px 12px' }} onClick={() => {}}>
+            Add File
+          </button>
+        </div>
+        {lessonFiles.length > 0 ? (
+          <ul className="file-list">
+            {lessonFiles.map((file) => (
+              <li key={file}>{file}</li>
+            ))}
+          </ul>
+        ) : (
+          <p style={{ fontStyle: 'italic', color: 'var(--color-text-muted)' }}>No files added.</p>
+        )}
       </div>
 
       {isModalOpen && (
