@@ -1,0 +1,68 @@
+export const lessons = [
+  {
+    id: 'LSN-204',
+    title: 'Street Skills Foundations',
+    dateTime: 'Feb 04 • 18:30',
+    difficulty: 'Beginner',
+    location: 'Hackney Hub',
+    staff: 'A. Patel',
+    category: 'Foundations',
+    duration: '90 mins',
+    delivery: 'In-person',
+    description: [
+      'Build essential movement patterns with a focus on control, balance, and rhythm.',
+      'Great for new learners looking to develop confidence and core technique.',
+    ],
+    files: ['lesson-plan.pptx', 'warmup-guide.docx'],
+  },
+  {
+    id: 'LSN-219',
+    title: 'Urban Movement Lab',
+    dateTime: 'Feb 06 • 19:00',
+    difficulty: 'Intermediate',
+    location: 'Brixton Studio',
+    staff: 'M. Reid',
+    category: 'Performance',
+    duration: '75 mins',
+    delivery: 'Hybrid',
+    description: [
+      'Explore creative movement structures and partner drills.',
+      'Hands-on session with collaborative progress checkpoints.',
+    ],
+    files: ['movement-lab.pptx', 'drills-pack.docx'],
+  },
+  {
+    id: 'LSN-231',
+    title: 'Creative Flow Session',
+    dateTime: 'Feb 08 • 17:45',
+    difficulty: 'All Levels',
+    location: 'Southbank',
+    staff: 'K. James',
+    category: 'Creativity',
+    duration: '60 mins',
+    delivery: 'Online',
+    description: [
+      'Develop flow and expression using guided prompts.',
+      'Perfect for mixed-ability groups and creative exploration.',
+    ],
+    files: ['flow-prompts.pdf', 'session-outline.docx'],
+  },
+  {
+    id: 'LSN-244',
+    title: 'Advanced Footwork',
+    dateTime: 'Feb 10 • 20:00',
+    difficulty: 'Advanced',
+    location: 'Camden Yard',
+    staff: 'R. Lewis',
+    category: 'Performance',
+    duration: '90 mins',
+    delivery: 'In-person',
+    description: [
+      'High-intensity footwork drills with precision training.',
+      'Designed for advanced learners focusing on speed and control.',
+    ],
+    files: ['footwork-drills.pptx', 'conditioning-notes.docx'],
+  },
+];
+
+export const PAGE_SIZE = 3;
