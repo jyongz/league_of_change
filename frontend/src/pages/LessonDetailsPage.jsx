@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { lessons } from '../data/lessons';
 import Topbar from '../components/Topbar';
@@ -8,6 +8,14 @@ function LessonDetailsPage({ onMenuToggle }) {
   const navigate = useNavigate();
   const location = useLocation();
   const lesson = lessons.find((item) => item.id === lessonId);
+
+  const [lessonOverview, setLessonOverview] = useState(lesson?.description || []);
+  const [lessonFiles, setLessonFiles] = useState(lesson?.files || []);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    category: '',
+    description: ''
+  });
 
   const fromSchedule = location.state?.from === 'schedule';
 
@@ -27,6 +35,28 @@ function LessonDetailsPage({ onMenuToggle }) {
       </section>
     );
   }
+
+  const handleGeneratePlan = (e) => {
+    e.preventDefault();
+    // Simulate API call
+    setLessonOverview([
+      "This is an AI-generated overview based on your input.",
+      "The lesson plan has been generated and added to the related files section for your review.",
+      "Dummy text for category: " + formData.category,
+      "Dummy text for description: " + formData.description
+    ]);
+    
+    if (!lessonFiles.includes('AI_Lesson_Plan.pdf')) {
+      setLessonFiles([...lessonFiles, 'AI_Lesson_Plan.pdf']);
+    }
+    
+    setIsModalOpen(false);
+  };
+
+  const handleFormChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
 
   return (
     <section className="page">
@@ -73,8 +103,13 @@ function LessonDetailsPage({ onMenuToggle }) {
         </div>
 
         <div className="detail-card">
-          <h3>Overview</h3>
-          {lesson.description.map((paragraph, index) => (
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+            <h3 style={{ margin: 0 }}>Overview</h3>
+            <button className="cta-button" style={{ fontSize: '12px', padding: '6px 12px' }} onClick={() => setIsModalOpen(true)}>
+              Generate Plan
+            </button>
+          </div>
+          {lessonOverview.map((paragraph, index) => (
             <p key={index}>{paragraph}</p>
           ))}
         </div>
@@ -83,11 +118,52 @@ function LessonDetailsPage({ onMenuToggle }) {
       <div className="panel">
         <h3 className="panel-title">Related Files</h3>
         <ul className="file-list">
-          {lesson.files.map((file) => (
+          {lessonFiles.map((file) => (
             <li key={file}>{file}</li>
           ))}
         </ul>
       </div>
+
+      {isModalOpen && (
+        <div className="modal-overlay" onClick={() => setIsModalOpen(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h2>Generate Lesson Plan</h2>
+              <button className="close-button" onClick={() => setIsModalOpen(false)}>&times;</button>
+            </div>
+            <form className="modal-form" onSubmit={handleGeneratePlan}>
+              <div className="form-group">
+                <label>Category</label>
+                <input 
+                  type="text" 
+                  name="category"
+                  placeholder="e.g. Technical Skills" 
+                  value={formData.category}
+                  onChange={handleFormChange}
+                  required 
+                />
+              </div>
+              <div className="form-group">
+                <label>Description</label>
+                <textarea 
+                  name="description"
+                  placeholder="Describe the desired lesson content..." 
+                  value={formData.description}
+                  onChange={handleFormChange}
+                  required 
+                  style={{ minHeight: '100px' }}
+                />
+              </div>
+              <div className="form-actions">
+                <button type="button" className="ghost" onClick={() => setIsModalOpen(false)}>Cancel</button>
+                <button type="submit" className="cta-button">
+                  Generate
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

@@ -20,8 +20,8 @@
   --color-menu-border: #2a3143;
   --color-badge-border: #2f384e;
   --color-brand: #b39b66;
-  --color-app-bg: #282c34;
-  --color-app-link: #61dafb;
+  --color-primary: #b39b66;
+  --color-surface-hover: #1c2230;
 }
 
 body {
