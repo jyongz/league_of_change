@@ -1,1 +1,7 @@
-# league_of_change
+To run frontend:
+
+
+
+To run backend:
+
+
