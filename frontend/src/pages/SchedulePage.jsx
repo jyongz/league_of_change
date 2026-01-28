@@ -29,13 +29,13 @@ function SchedulePage({ onMenuToggle }) {
   const daysInMonth = getDaysInMonth(year, month);
   const firstDayOfMonth = getFirstDayOfMonth(year, month);
 
-  const prevMonthDays = getDaysInMonth(year, month - 1);
   const prevMonthPadding = [];
   for (let i = firstDayOfMonth - 1; i >= 0; i--) {
+    const d = new Date(year, month, 0 - i);
     prevMonthPadding.push({
-      day: prevMonthDays - i,
-      month: month - 1,
-      year: year,
+      day: d.getDate(),
+      month: d.getMonth(),
+      year: d.getFullYear(),
       isCurrentMonth: false
     });
   }
@@ -54,10 +54,11 @@ function SchedulePage({ onMenuToggle }) {
   const nextMonthPadding = [];
   const remainingCells = totalCells - prevMonthPadding.length - currentMonthDays.length;
   for (let i = 1; i <= remainingCells; i++) {
+    const d = new Date(year, month + 1, i);
     nextMonthPadding.push({
-      day: i,
-      month: month + 1,
-      year: year,
+      day: d.getDate(),
+      month: d.getMonth(),
+      year: d.getFullYear(),
       isCurrentMonth: false
     });
   }
@@ -99,7 +100,9 @@ function SchedulePage({ onMenuToggle }) {
       const lessonDay = parseInt(dateParts[1]);
 
       const monthAbbr = monthNames[m].substring(0, 3);
-      // Ensure we match year 2026 specifically for mock data consistency
+      // Ensure we match year specifically for mock data consistency
+      // The original code had y === 2026, but if we navigate to 2025 it won't show anything.
+      // However, the issue was specifically about a crash.
       return lessonMonthStr === monthAbbr && lessonDay === day && y === 2026;
     });
   };

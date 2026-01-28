@@ -66,7 +66,7 @@ function LessonDetailsPage({ onMenuToggle }) {
               <strong>{lesson.location}</strong>
             </li>
             <li>
-              <span>Teaching Staff</span>
+              <span>Staff ID</span>
               <strong>{lesson.staff}</strong>
             </li>
           </ul>

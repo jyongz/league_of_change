@@ -60,6 +60,9 @@ function Sidebar({ isMobileMenuOpen, onLinkClick }) {
         <NavLink className="nav-item" to="/progress" onClick={handleLinkClick}>
           Progress
         </NavLink>
+        <NavLink className="nav-item" to="/staff" onClick={handleLinkClick}>
+          Staff
+        </NavLink>
       </nav>
 
       <div className="sidebar-card">

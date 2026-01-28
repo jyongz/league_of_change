@@ -36,7 +36,7 @@ function LessonsPage({ onMenuToggle }) {
       date: '',
       time: '',
       location: '',
-      staff: ''
+      staff: 'STF-'
     });
     setIsModalOpen(true);
   };
@@ -264,7 +264,7 @@ function LessonsPage({ onMenuToggle }) {
                     ))}
                   </select>
                 </th>
-                <th>Teaching Staff</th>
+                <th>Staff ID</th>
                 <th style={{ width: '40px' }}></th>
               </tr>
             </thead>
@@ -432,11 +432,11 @@ function LessonsPage({ onMenuToggle }) {
                 />
               </div>
               <div className="form-group">
-                <label>Teaching Staff</label>
+                <label>Staff ID</label>
                 <input 
                   type="text" 
                   name="staff"
-                  placeholder="e.g. A. Patel" 
+                  placeholder="e.g. STF-001" 
                   value={formData.staff}
                   onChange={handleFormChange}
                   required 

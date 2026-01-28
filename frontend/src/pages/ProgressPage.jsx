@@ -5,7 +5,7 @@ import { SCOREBOARD_PAGE_SIZE } from '../data/lessons';
 
 function ProgressPage({ onMenuToggle }) {
   const [selectedParticipant, setSelectedParticipant] = useState(null);
-  const [nameQuery, setNameQuery] = useState('');
+  const [idQuery, setIdQuery] = useState('');
   const [locationFilter, setLocationFilter] = useState('all');
   const [ageFilter, setAgeFilter] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
@@ -21,19 +21,19 @@ function ProgressPage({ onMenuToggle }) {
   );
 
   const filteredParticipants = useMemo(() => {
-    const query = nameQuery.trim().toLowerCase();
+    const query = idQuery.trim().toLowerCase();
     return participants.filter((p) => {
-      const matchesName = query.length === 0 || p.name.toLowerCase().includes(query);
+      const matchesId = query.length === 0 || p.id.toLowerCase().includes(query);
       const matchesLocation = locationFilter === 'all' || p.location === locationFilter;
       const matchesAge = ageFilter === 'all' || p.age.toString() === ageFilter;
 
-      return matchesName && matchesLocation && matchesAge;
+      return matchesId && matchesLocation && matchesAge;
     });
-  }, [nameQuery, locationFilter, ageFilter]);
+  }, [idQuery, locationFilter, ageFilter]);
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [nameQuery, locationFilter, ageFilter]);
+  }, [idQuery, locationFilter, ageFilter]);
 
   const totalPages = Math.max(1, Math.ceil(filteredParticipants.length / SCOREBOARD_PAGE_SIZE));
   const pagedParticipants = filteredParticipants.slice(
@@ -56,13 +56,13 @@ function ProgressPage({ onMenuToggle }) {
               <thead>
                 <tr>
                   <th>
-                    Name
+                    Participant ID
                     <input
                       className="header-input"
                       type="search"
-                      placeholder="Search name"
-                      value={nameQuery}
-                      onChange={(e) => setNameQuery(e.target.value)}
+                      placeholder="Search ID"
+                      value={idQuery}
+                      onChange={(e) => setIdQuery(e.target.value)}
                     />
                   </th>
                   <th>
@@ -167,7 +167,7 @@ function ProgressPage({ onMenuToggle }) {
                 {selectedParticipant.feedback.map((f, i) => (
                   <div key={i} className="feedback-item">
                     <p className="feedback-comment">"{f.comment}"</p>
-                    <p className="feedback-meta">{f.date} • {f.staff}</p>
+                    <p className="feedback-meta">{f.date} • Staff ID: {f.staff}</p>
                   </div>
                 ))}
               </div>

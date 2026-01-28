@@ -37,8 +37,8 @@ function OverviewPage({ onMenuToggle }) {
   return (
     <>
       <Topbar 
-        title="Live Overview" 
-        subtitle="Real-time impact, reach, and momentum." 
+        title="Lessons Overview"
+        subtitle="View and manage lessons at a glance."
         onMenuToggle={onMenuToggle}
       />
 
@@ -60,12 +60,6 @@ function OverviewPage({ onMenuToggle }) {
           label="Available volunteers this month" 
           value="34" 
           trend="Steady" 
-          trendType="up" 
-        />
-        <StatCard 
-          label="Attendance rate (last 5)" 
-          value="88%" 
-          trend="+2% week" 
           trendType="up" 
         />
       </section>

@@ -7,6 +7,7 @@ import LessonsPage from './pages/LessonsPage';
 import LessonDetailsPage from './pages/LessonDetailsPage';
 import SchedulePage from './pages/SchedulePage';
 import ProgressPage from './pages/ProgressPage';
+import StaffPage from './pages/StaffPage';
 import LoginPage from './pages/LoginPage';
 import { AuthProvider, useAuth } from './context/AuthContext';
 
@@ -32,6 +33,7 @@ function AppContent() {
           <Route path="/lessons/:lessonId" element={<LessonDetailsPage onMenuToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)} />} />
           <Route path="/schedule" element={<SchedulePage onMenuToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)} />} />
           <Route path="/progress" element={<ProgressPage onMenuToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)} />} />
+          <Route path="/staff" element={<StaffPage onMenuToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)} />} />
         </Routes>
       </main>
     </div>

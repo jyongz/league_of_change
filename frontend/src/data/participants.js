@@ -1,7 +1,7 @@
 export const participants = [
   {
     id: 'P-001',
-    name: 'Jordan Smith',
+    name: 'P-001',
     age: 17,
     attendance: 92,
     location: 'Hackney',
@@ -12,13 +12,13 @@ export const participants = [
       { date: '2026-02-08', status: 'Absent', lesson: 'Creative Flow Session' },
     ],
     feedback: [
-      { date: '2026-02-06', staff: 'M. Reid', comment: 'Excellent engagement and technical improvement.' },
-      { date: '2026-01-30', staff: 'A. Patel', comment: 'Consistency is key. Great work on foundational movements.' },
+      { date: '2026-02-06', staff: 'STF-002', comment: 'Excellent engagement and technical improvement.' },
+      { date: '2026-01-30', staff: 'STF-001', comment: 'Consistency is key. Great work on foundational movements.' },
     ]
   },
   {
     id: 'P-002',
-    name: 'Alex Johnson',
+    name: 'P-002',
     age: 16,
     attendance: 85,
     location: 'Brixton',
@@ -28,12 +28,12 @@ export const participants = [
       { date: '2026-02-06', status: 'Present', lesson: 'Urban Movement Lab' },
     ],
     feedback: [
-      { date: '2026-02-04', staff: 'A. Patel', comment: 'Strong energy and willingness to learn.' },
+      { date: '2026-02-04', staff: 'STF-001', comment: 'Strong energy and willingness to learn.' },
     ]
   },
   {
     id: 'P-003',
-    name: 'Maria Garcia',
+    name: 'P-003',
     age: 18,
     attendance: 98,
     location: 'Hackney',
@@ -45,13 +45,13 @@ export const participants = [
       { date: '2026-02-10', status: 'Present', lesson: 'Advanced Footwork' },
     ],
     feedback: [
-      { date: '2026-02-10', staff: 'R. Lewis', comment: 'Exceptional focus during advanced drills.' },
-      { date: '2026-02-08', staff: 'K. James', comment: 'Natural leadership in group exercises.' },
+      { date: '2026-02-10', staff: 'STF-004', comment: 'Exceptional focus during advanced drills.' },
+      { date: '2026-02-08', staff: 'STF-003', comment: 'Natural leadership in group exercises.' },
     ]
   },
   {
     id: 'P-004',
-    name: 'Sam Wilson',
+    name: 'P-004',
     age: 15,
     attendance: 78,
     location: 'Camden',
@@ -61,12 +61,12 @@ export const participants = [
       { date: '2026-02-06', status: 'Present', lesson: 'Urban Movement Lab' },
     ],
     feedback: [
-      { date: '2026-02-06', staff: 'M. Reid', comment: 'Needs to work on punctuality but shows great potential.' },
+      { date: '2026-02-06', staff: 'STF-002', comment: 'Needs to work on punctuality but shows great potential.' },
     ]
   },
   {
     id: 'P-005',
-    name: 'Chloe Davis',
+    name: 'P-005',
     age: 17,
     attendance: 100,
     location: 'Hackney',
@@ -77,12 +77,12 @@ export const participants = [
       { date: '2026-02-08', status: 'Present', lesson: 'Creative Flow Session' },
     ],
     feedback: [
-      { date: '2026-02-08', staff: 'K. James', comment: 'Amazing creativity and flow.' },
+      { date: '2026-02-08', staff: 'STF-003', comment: 'Amazing creativity and flow.' },
     ]
   },
   {
     id: 'P-006',
-    name: 'Liam Taylor',
+    name: 'P-006',
     age: 19,
     attendance: 65,
     location: 'Brixton',
@@ -92,12 +92,12 @@ export const participants = [
       { date: '2026-02-15', status: 'Present', lesson: 'Power Moves intensive' },
     ],
     feedback: [
-      { date: '2026-02-15', staff: 'M. Reid', comment: 'Great power, needs more control.' },
+      { date: '2026-02-15', staff: 'STF-002', comment: 'Great power, needs more control.' },
     ]
   },
   {
     id: 'P-007',
-    name: 'Zoe Brown',
+    name: 'P-007',
     age: 16,
     attendance: 88,
     location: 'Camden',
@@ -107,12 +107,12 @@ export const participants = [
       { date: '2026-02-18', status: 'Present', lesson: 'Digital Dance Marketing' },
     ],
     feedback: [
-      { date: '2026-02-18', staff: 'K. James', comment: 'Sharp mind for marketing strategies.' },
+      { date: '2026-02-18', staff: 'STF-003', comment: 'Sharp mind for marketing strategies.' },
     ]
   },
   {
     id: 'P-008',
-    name: 'Ethan Hunt',
+    name: 'P-008',
     age: 18,
     attendance: 95,
     location: 'Hackney',
@@ -124,7 +124,7 @@ export const participants = [
       { date: '2026-02-15', status: 'Present', lesson: 'Power Moves intensive' },
     ],
     feedback: [
-      { date: '2026-02-15', staff: 'M. Reid', comment: 'Fearless approach to new moves.' },
+      { date: '2026-02-15', staff: 'STF-002', comment: 'Fearless approach to new moves.' },
     ]
   }
 ];
