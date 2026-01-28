@@ -1,10 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap');
+
+:root {
+  color-scheme: dark;
+  --color-bg: #0b0b0f;
+  --color-bg-alt: #0f1116;
+  --color-surface: #121622;
+  --color-surface-alt: #141823;
+  --color-border: #1f2430;
+  --color-border-strong: #23293a;
+  --color-border-nav: #222938;
+  --color-text: #f4f4f5;
+  --color-text-muted: #a1a1aa;
+  --color-text-soft: #d4d4d8;
+  --color-text-ghost: #e4e4e7;
+  --color-text-invert: #0b0b0f;
+  --color-accent: #b39b66;
+  --color-accent-alt: #ffa500;
+  --color-danger: #ff4d4f;
+  --color-menu-border: #2a3143;
+  --color-badge-border: #2f384e;
+  --color-brand: #b39b66;
+  --color-app-bg: #282c34;
+  --color-app-link: #61dafb;
+}
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  background: #0b0b0f;
+  color: #f4f4f5;
+  font-family: 'Oswald', 'Segoe UI', system-ui, sans-serif;
+  letter-spacing: 0.2px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+button {
+  font-family: inherit;
 }
 
 code {
