@@ -8,6 +8,9 @@ function SchedulePage({ onMenuToggle }) {
   const [currentDate, setCurrentDate] = useState(new Date(2026, 1, 1)); // Default to February 2026 as per data
   const [view, setView] = useState('month');
   const [localLessons, setLocalLessons] = useState(lessons);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editingLesson, setEditingLesson] = useState(null);
+  const [editFormData, setEditFormData] = useState({ date: '', time: '' });
 
   const monthNames = [
     "January", "February", "March", "April", "May", "June",
@@ -108,6 +111,49 @@ function SchedulePage({ onMenuToggle }) {
       }
       return l;
     }));
+  };
+
+  const handleOpenEditModal = (lesson) => {
+    setEditingLesson(lesson);
+    // Parse proposedTime (e.g., "Feb 04 • 18:30")
+    let defaultDate = '2026-02-04';
+    let defaultTime = '18:30';
+    
+    if (lesson.proposedTime && lesson.proposedTime.includes(' • ')) {
+      const parts = lesson.proposedTime.split(' • ');
+      const dateParts = parts[0].split(' '); // ["Feb", "04"]
+      const monthIdx = monthNames.findIndex(m => m.startsWith(dateParts[0]));
+      const day = dateParts[1];
+      if (monthIdx !== -1) {
+        defaultDate = `2026-${(monthIdx + 1).toString().padStart(2, '0')}-${day.padStart(2, '0')}`;
+      }
+      defaultTime = parts[1];
+    }
+    
+    setEditFormData({ date: defaultDate, time: defaultTime });
+    setIsEditModalOpen(true);
+  };
+
+  const handleEditSubmit = (e) => {
+    e.preventDefault();
+    const { date, time } = editFormData;
+    
+    // Convert date "2026-02-04" to "Feb 04" using local time to avoid timezone shifts
+    const [y, m, d] = date.split('-').map(Number);
+    const dateObj = new Date(y, m - 1, d);
+    const monthAbbr = monthNames[dateObj.getMonth()].substring(0, 3);
+    const day = dateObj.getDate().toString().padStart(2, '0');
+    const newDateTime = `${monthAbbr} ${day} • ${time}`;
+
+    setLocalLessons(prev => prev.map(l => {
+      if (l.id === editingLesson.id) {
+        return { ...l, dateTime: newDateTime };
+      }
+      return l;
+    }));
+    
+    setIsEditModalOpen(false);
+    setEditingLesson(null);
   };
 
   const handleScheduleAll = () => {
@@ -262,7 +308,15 @@ function SchedulePage({ onMenuToggle }) {
                 <div key={lesson.id} className="unscheduled-item">
                   <div className="unscheduled-info">
                     <p className="unscheduled-title">{lesson.title}</p>
-                    <p className="unscheduled-meta">Proposed: {lesson.proposedTime}</p>
+                    <p className="unscheduled-meta">
+                      Proposed: {lesson.proposedTime}
+                      <button 
+                        className="edit-proposed-btn" 
+                        onClick={() => handleOpenEditModal(lesson)}
+                      >
+                        Edit
+                      </button>
+                    </p>
                   </div>
                   <button 
                     className="add-to-schedule-btn"
@@ -277,6 +331,47 @@ function SchedulePage({ onMenuToggle }) {
           </div>
         </aside>
       </div>
+      
+      {isEditModalOpen && (
+        <div className="modal-overlay" onClick={() => setIsEditModalOpen(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h2>Edit Proposed Time</h2>
+              <button className="close-button" onClick={() => setIsEditModalOpen(false)}>&times;</button>
+            </div>
+            <form className="modal-form" onSubmit={handleEditSubmit}>
+              <div className="form-group">
+                <label>Lesson</label>
+                <input type="text" value={editingLesson?.title} disabled />
+              </div>
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Date</label>
+                  <input 
+                    type="date" 
+                    value={editFormData.date}
+                    onChange={(e) => setEditFormData({ ...editFormData, date: e.target.value })}
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Time</label>
+                  <input 
+                    type="time" 
+                    value={editFormData.time}
+                    onChange={(e) => setEditFormData({ ...editFormData, time: e.target.value })}
+                    required
+                  />
+                </div>
+              </div>
+              <div className="form-actions">
+                <button type="button" className="ghost" onClick={() => setIsEditModalOpen(false)}>Cancel</button>
+                <button type="submit" className="cta-button">Schedule Lesson</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

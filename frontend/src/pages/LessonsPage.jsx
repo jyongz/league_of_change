@@ -8,7 +8,7 @@ function LessonsPage({ onMenuToggle }) {
 
   const [lessonIdQuery, setLessonIdQuery] = useState('');
   const [lessonTitleQuery, setLessonTitleQuery] = useState('');
-  const [lessonDateTime, setLessonDateTime] = useState('all');
+  const [lessonDateTime, setLessonDateTime] = useState('');
   const [lessonDifficulty, setLessonDifficulty] = useState('all');
   const [lessonLocation, setLessonLocation] = useState('all');
   const [lessonCategory, setLessonCategory] = useState('all');
@@ -21,7 +21,8 @@ function LessonsPage({ onMenuToggle }) {
     title: '',
     category: '',
     difficulty: '',
-    dateTime: '',
+    date: '',
+    time: '',
     location: '',
     staff: ''
   });
@@ -32,7 +33,8 @@ function LessonsPage({ onMenuToggle }) {
       title: '',
       category: '',
       difficulty: '',
-      dateTime: '',
+      date: '',
+      time: '',
       location: '',
       staff: ''
     });
@@ -41,11 +43,28 @@ function LessonsPage({ onMenuToggle }) {
 
   const handleOpenEditModal = (lesson) => {
     setEditingLesson(lesson);
+    
+    let defaultDate = '';
+    let defaultTime = '';
+    
+    if (lesson.dateTime && lesson.dateTime.includes(' • ')) {
+      const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      const parts = lesson.dateTime.split(' • ');
+      const dateParts = parts[0].split(' '); // ["Feb", "04"]
+      const monthIdx = monthNames.indexOf(dateParts[0]);
+      const day = dateParts[1];
+      if (monthIdx !== -1) {
+        defaultDate = `2026-${(monthIdx + 1).toString().padStart(2, '0')}-${day.padStart(2, '0')}`;
+      }
+      defaultTime = parts[1];
+    }
+
     setFormData({
       title: lesson.title,
       category: lesson.category,
       difficulty: lesson.difficulty,
-      dateTime: lesson.dateTime,
+      date: defaultDate,
+      time: defaultTime,
       location: lesson.location,
       staff: lesson.staff
     });
@@ -57,10 +76,6 @@ function LessonsPage({ onMenuToggle }) {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const uniqueDates = useMemo(
-    () => Array.from(new Set(lessons.filter(l => l.dateTime).map((lesson) => lesson.dateTime))),
-    []
-  );
   const uniqueDifficulties = useMemo(
     () => Array.from(new Set(lessons.map((lesson) => lesson.difficulty))),
     []
@@ -78,16 +93,33 @@ function LessonsPage({ onMenuToggle }) {
     const idQuery = lessonIdQuery.trim().toLowerCase();
     const titleQuery = lessonTitleQuery.trim().toLowerCase();
 
+    const monthNames = [
+      "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    ];
+
     return lessons.filter((lesson) => {
       const matchesId =
-        idQuery.length === 0 || lesson.id.toLowerCase() === idQuery;
+        idQuery.length === 0 || lesson.id.toLowerCase().includes(idQuery);
 
       const matchesTitle =
         titleQuery.length === 0 ||
         lesson.title.toLowerCase().includes(titleQuery);
 
-      const matchesDate =
-        lessonDateTime === 'all' || lesson.dateTime === lessonDateTime;
+      let matchesDate = true;
+      if (lessonDateTime) {
+        if (!lesson.dateTime) {
+          matchesDate = false;
+        } else {
+          // lessonDateTime is YYYY-MM-DD
+          // lesson.dateTime is Month Day • HH:mm (e.g., "Feb 04 • 18:30")
+          const [_, month, day] = lessonDateTime.split('-').map(Number);
+          const monthAbbr = monthNames[month - 1];
+          const dayStr = day.toString().padStart(2, '0');
+          const datePrefix = `${monthAbbr} ${dayStr}`;
+          matchesDate = lesson.dateTime.startsWith(datePrefix);
+        }
+      }
 
       const matchesDifficulty =
         lessonDifficulty === 'all' || lesson.difficulty === lessonDifficulty;
@@ -157,7 +189,7 @@ function LessonsPage({ onMenuToggle }) {
                   <input
                     className="header-input"
                     type="search"
-                    placeholder="Exact match"
+                    placeholder="Partial match"
                     value={lessonIdQuery}
                     onChange={(event) => setLessonIdQuery(event.target.value)}
                     onClick={(e) => e.stopPropagation()}
@@ -192,19 +224,13 @@ function LessonsPage({ onMenuToggle }) {
                 </th>
                 <th>
                   Date &amp; Time
-                  <select
-                    className="header-select"
+                  <input
+                    className="header-date"
+                    type="date"
                     value={lessonDateTime}
                     onChange={(event) => setLessonDateTime(event.target.value)}
                     onClick={(e) => e.stopPropagation()}
-                  >
-                    <option value="all">All</option>
-                    {uniqueDates.map((date) => (
-                      <option key={date} value={date}>
-                        {date}
-                      </option>
-                    ))}
-                  </select>
+                  />
                 </th>
                 <th>
                   Difficulty
@@ -374,26 +400,36 @@ function LessonsPage({ onMenuToggle }) {
               </div>
               <div className="form-row">
                 <div className="form-group">
-                  <label>Date & Time</label>
+                  <label>Date</label>
                   <input 
-                    type="text" 
-                    name="dateTime"
-                    placeholder="e.g. Feb 04 • 18:30" 
-                    value={formData.dateTime}
+                    type="date" 
+                    name="date"
+                    value={formData.date}
                     onChange={handleFormChange}
+                    required
                   />
                 </div>
                 <div className="form-group">
-                  <label>Location</label>
+                  <label>Time</label>
                   <input 
-                    type="text" 
-                    name="location"
-                    placeholder="e.g. Hackney Hub" 
-                    value={formData.location}
+                    type="time" 
+                    name="time"
+                    value={formData.time}
                     onChange={handleFormChange}
-                    required 
+                    required
                   />
                 </div>
+              </div>
+              <div className="form-group">
+                <label>Location</label>
+                <input 
+                  type="text" 
+                  name="location"
+                  placeholder="e.g. Hackney Hub" 
+                  value={formData.location}
+                  onChange={handleFormChange}
+                  required 
+                />
               </div>
               <div className="form-group">
                 <label>Teaching Staff</label>

@@ -634,7 +634,8 @@
   }
 
   .header-input,
-  .header-select {
+  .header-select,
+  .header-date {
     padding: 6px 8px;
     font-size: 12px;
   }
@@ -1036,7 +1037,8 @@
 }
 
 .header-input,
-.header-select {
+.header-select,
+.header-date {
   width: 100%;
   background: var(--color-bg);
   border: 1px solid var(--color-border);
@@ -1044,6 +1046,12 @@
   padding: 8px 10px;
   font-family: inherit;
   text-transform: none;
+  border-radius: 0;
+}
+
+.header-date {
+  display: block;
+  margin-top: 8px;
 }
 
 .header-input::placeholder {
@@ -1625,4 +1633,27 @@
     width: 100%;
     position: static;
   }
+}
+
+.edit-proposed-btn {
+  background: var(--color-surface-hover);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-left: 8px;
+  padding: 2px 6px;
+  font-size: 11px;
+}
+
+.edit-proposed-btn:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.modal-form input:disabled {
+  background: var(--color-bg);
+  cursor: not-allowed;
+  opacity: 0.7;
 }
