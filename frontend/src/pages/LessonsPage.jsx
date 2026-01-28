@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { lessons, PAGE_SIZE } from '../data/lessons';
 import Topbar from '../components/Topbar';
 
-function LessonsPage() {
+function LessonsPage({ onMenuToggle }) {
   const navigate = useNavigate();
 
   const [lessonIdQuery, setLessonIdQuery] = useState('');
@@ -13,9 +13,52 @@ function LessonsPage() {
   const [lessonLocation, setLessonLocation] = useState('all');
   const [lessonCategory, setLessonCategory] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingLesson, setEditingLesson] = useState(null);
+  const [activeMenuId, setActiveMenuId] = useState(null);
+
+  const [formData, setFormData] = useState({
+    title: '',
+    category: '',
+    difficulty: '',
+    dateTime: '',
+    location: '',
+    staff: ''
+  });
+
+  const handleOpenCreateModal = () => {
+    setEditingLesson(null);
+    setFormData({
+      title: '',
+      category: '',
+      difficulty: '',
+      dateTime: '',
+      location: '',
+      staff: ''
+    });
+    setIsModalOpen(true);
+  };
+
+  const handleOpenEditModal = (lesson) => {
+    setEditingLesson(lesson);
+    setFormData({
+      title: lesson.title,
+      category: lesson.category,
+      difficulty: lesson.difficulty,
+      dateTime: lesson.dateTime,
+      location: lesson.location,
+      staff: lesson.staff
+    });
+    setIsModalOpen(true);
+  };
+
+  const handleFormChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
 
   const uniqueDates = useMemo(
-    () => Array.from(new Set(lessons.map((lesson) => lesson.dateTime))),
+    () => Array.from(new Set(lessons.filter(l => l.dateTime).map((lesson) => lesson.dateTime))),
     []
   );
   const uniqueDifficulties = useMemo(
@@ -91,11 +134,19 @@ function LessonsPage() {
   );
 
   return (
-    <section className="page">
+    <section className="page" onClick={() => setActiveMenuId(null)}>
       <Topbar 
         title="Lessons" 
         subtitle="Your learning programs at a glance." 
+        onMenuToggle={onMenuToggle}
       />
+
+      <div className="page-actions">
+        <button className="cta-button" onClick={handleOpenCreateModal}>
+          + New Lesson
+        </button>
+      </div>
+
       <div className="panel">
         <div className="table-wrap">
           <table className="lessons-table">
@@ -109,6 +160,7 @@ function LessonsPage() {
                     placeholder="Exact match"
                     value={lessonIdQuery}
                     onChange={(event) => setLessonIdQuery(event.target.value)}
+                    onClick={(e) => e.stopPropagation()}
                   />
                 </th>
                 <th>
@@ -119,6 +171,7 @@ function LessonsPage() {
                     placeholder="Partial match"
                     value={lessonTitleQuery}
                     onChange={(event) => setLessonTitleQuery(event.target.value)}
+                    onClick={(e) => e.stopPropagation()}
                   />
                 </th>
                 <th>
@@ -127,6 +180,7 @@ function LessonsPage() {
                     className="header-select"
                     value={lessonCategory}
                     onChange={(event) => setLessonCategory(event.target.value)}
+                    onClick={(e) => e.stopPropagation()}
                   >
                     <option value="all">All</option>
                     {uniqueCategories.map((category) => (
@@ -142,6 +196,7 @@ function LessonsPage() {
                     className="header-select"
                     value={lessonDateTime}
                     onChange={(event) => setLessonDateTime(event.target.value)}
+                    onClick={(e) => e.stopPropagation()}
                   >
                     <option value="all">All</option>
                     {uniqueDates.map((date) => (
@@ -157,6 +212,7 @@ function LessonsPage() {
                     className="header-select"
                     value={lessonDifficulty}
                     onChange={(event) => setLessonDifficulty(event.target.value)}
+                    onClick={(e) => e.stopPropagation()}
                   >
                     <option value="all">All</option>
                     {uniqueDifficulties.map((level) => (
@@ -172,6 +228,7 @@ function LessonsPage() {
                     className="header-select"
                     value={lessonLocation}
                     onChange={(event) => setLessonLocation(event.target.value)}
+                    onClick={(e) => e.stopPropagation()}
                   >
                     <option value="all">All</option>
                     {uniqueLocations.map((place) => (
@@ -182,12 +239,13 @@ function LessonsPage() {
                   </select>
                 </th>
                 <th>Teaching Staff</th>
+                <th style={{ width: '40px' }}></th>
               </tr>
             </thead>
             <tbody>
               {pagedLessons.length === 0 ? (
                 <tr>
-                  <td colSpan="7" className="empty-state">
+                  <td colSpan="8" className="empty-state">
                     No lessons match your filters.
                   </td>
                 </tr>
@@ -196,15 +254,45 @@ function LessonsPage() {
                   <tr
                     key={lesson.id}
                     className="table-row"
-                    onClick={() => navigate(`/lessons/${lesson.id}`)}
                   >
-                    <td>{lesson.id}</td>
-                    <td>{lesson.title}</td>
-                    <td>{lesson.category}</td>
-                    <td>{lesson.dateTime}</td>
-                    <td>{lesson.difficulty}</td>
-                    <td>{lesson.location}</td>
-                    <td>{lesson.staff}</td>
+                    <td onClick={() => navigate(`/lessons/${lesson.id}`)}>{lesson.id}</td>
+                    <td onClick={() => navigate(`/lessons/${lesson.id}`)}>{lesson.title}</td>
+                    <td onClick={() => navigate(`/lessons/${lesson.id}`)}>{lesson.category}</td>
+                    <td onClick={() => navigate(`/lessons/${lesson.id}`)}>{lesson.dateTime}</td>
+                    <td onClick={() => navigate(`/lessons/${lesson.id}`)}>{lesson.difficulty}</td>
+                    <td onClick={() => navigate(`/lessons/${lesson.id}`)}>{lesson.location}</td>
+                    <td onClick={() => navigate(`/lessons/${lesson.id}`)}>{lesson.staff}</td>
+                    <td className="actions-cell">
+                      <div className="action-menu-container">
+                        <button 
+                          className="action-dots"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setActiveMenuId(activeMenuId === lesson.id ? null : lesson.id);
+                          }}
+                        >
+                          ⋮
+                        </button>
+                        {activeMenuId === lesson.id && (
+                          <div className="action-dropdown">
+                            <button onClick={(e) => {
+                              e.stopPropagation();
+                              setActiveMenuId(null);
+                              navigate(`/lessons/${lesson.id}`);
+                            }}>View</button>
+                            <button onClick={(e) => {
+                              e.stopPropagation();
+                              setActiveMenuId(null);
+                              handleOpenEditModal(lesson);
+                            }}>Edit</button>
+                            <button className="delete" onClick={(e) => {
+                              e.stopPropagation();
+                              setActiveMenuId(null);
+                            }}>Delete</button>
+                          </div>
+                        )}
+                      </div>
+                    </td>
                   </tr>
                 ))
               )}
@@ -215,7 +303,10 @@ function LessonsPage() {
         <div className="pagination">
           <button
             className="page-button"
-            onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
+            onClick={(e) => {
+              e.stopPropagation();
+              setCurrentPage((page) => Math.max(1, page - 1));
+            }}
             disabled={currentPage === 1}
           >
             Prev
@@ -225,13 +316,106 @@ function LessonsPage() {
           </div>
           <button
             className="page-button"
-            onClick={() => setCurrentPage((page) => Math.min(totalPages, page + 1))}
+            onClick={(e) => {
+              e.stopPropagation();
+              setCurrentPage((page) => Math.min(totalPages, page + 1));
+            }}
             disabled={currentPage === totalPages}
           >
             Next
           </button>
         </div>
       </div>
+
+      {isModalOpen && (
+        <div className="modal-overlay" onClick={() => setIsModalOpen(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h2>{editingLesson ? 'Edit Lesson' : 'Create New Lesson'}</h2>
+              <button className="close-button" onClick={() => setIsModalOpen(false)}>&times;</button>
+            </div>
+            <form className="modal-form" onSubmit={(e) => { e.preventDefault(); setIsModalOpen(false); }}>
+              <div className="form-group">
+                <label>Lesson Title</label>
+                <input 
+                  type="text" 
+                  name="title"
+                  placeholder="e.g. Street Skills Foundations" 
+                  value={formData.title}
+                  onChange={handleFormChange}
+                  required 
+                />
+              </div>
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Category</label>
+                  <select 
+                    name="category"
+                    value={formData.category}
+                    onChange={handleFormChange}
+                    required
+                  >
+                    <option value="">Select Category</option>
+                    {uniqueCategories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label>Difficulty</label>
+                  <select 
+                    name="difficulty"
+                    value={formData.difficulty}
+                    onChange={handleFormChange}
+                    required
+                  >
+                    <option value="">Select Difficulty</option>
+                    {uniqueDifficulties.map(diff => <option key={diff} value={diff}>{diff}</option>)}
+                  </select>
+                </div>
+              </div>
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Date & Time</label>
+                  <input 
+                    type="text" 
+                    name="dateTime"
+                    placeholder="e.g. Feb 04 • 18:30" 
+                    value={formData.dateTime}
+                    onChange={handleFormChange}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Location</label>
+                  <input 
+                    type="text" 
+                    name="location"
+                    placeholder="e.g. Hackney Hub" 
+                    value={formData.location}
+                    onChange={handleFormChange}
+                    required 
+                  />
+                </div>
+              </div>
+              <div className="form-group">
+                <label>Teaching Staff</label>
+                <input 
+                  type="text" 
+                  name="staff"
+                  placeholder="e.g. A. Patel" 
+                  value={formData.staff}
+                  onChange={handleFormChange}
+                  required 
+                />
+              </div>
+              <div className="form-actions">
+                <button type="button" className="ghost" onClick={() => setIsModalOpen(false)}>Cancel</button>
+                <button type="submit" className="cta-button">
+                  {editingLesson ? 'Save Changes' : 'Create Lesson'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

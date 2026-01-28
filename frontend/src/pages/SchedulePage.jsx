@@ -3,10 +3,11 @@ import { lessons } from '../data/lessons';
 import { useNavigate } from 'react-router-dom';
 import Topbar from '../components/Topbar';
 
-function SchedulePage() {
+function SchedulePage({ onMenuToggle }) {
   const navigate = useNavigate();
   const [currentDate, setCurrentDate] = useState(new Date(2026, 1, 1)); // Default to February 2026 as per data
   const [view, setView] = useState('month');
+  const [localLessons, setLocalLessons] = useState(lessons);
 
   const monthNames = [
     "January", "February", "March", "April", "May", "June",
@@ -87,7 +88,8 @@ function SchedulePage() {
   };
 
   const getLessonsForDay = (day, m, y) => {
-    return lessons.filter(lesson => {
+    return localLessons.filter(lesson => {
+      if (!lesson.dateTime || !lesson.dateTime.includes(' • ')) return false;
       const parts = lesson.dateTime.split(' • ');
       const dateParts = parts[0].split(' '); // ['Feb', '04']
       const lessonMonthStr = dateParts[0];
@@ -98,6 +100,26 @@ function SchedulePage() {
       return lessonMonthStr === monthAbbr && lessonDay === day && y === 2026;
     });
   };
+
+  const handleScheduleLesson = (lessonId) => {
+    setLocalLessons(prev => prev.map(l => {
+      if (l.id === lessonId) {
+        return { ...l, dateTime: l.proposedTime || 'Feb 01 • 09:00' };
+      }
+      return l;
+    }));
+  };
+
+  const handleScheduleAll = () => {
+    setLocalLessons(prev => prev.map(l => {
+      if (!l.dateTime) {
+        return { ...l, dateTime: l.proposedTime || 'Feb 01 • 09:00' };
+      }
+      return l;
+    }));
+  };
+
+  const unscheduledLessons = localLessons.filter(l => !l.dateTime);
 
   const renderMonthView = () => (
     <div className="calendar-grid">
@@ -117,9 +139,9 @@ function SchedulePage() {
                 <div 
                   key={lesson.id} 
                   className="calendar-lesson-tag"
-                  onClick={() => navigate(`/lessons/${lesson.id}`)}
+                  onClick={() => navigate(`/lessons/${lesson.id}`, { state: { from: 'schedule' } })}
                 >
-                  <span className="lesson-time">{lesson.dateTime.split(' • ')[1]}</span>
+                  <span className="lesson-time">{lesson.dateTime?.includes(' • ') ? lesson.dateTime.split(' • ')[1] : ''}</span>
                   <span className="lesson-title">{lesson.title}</span>
                 </div>
               ))}
@@ -152,6 +174,7 @@ function SchedulePage() {
                   <div key={time} className="time-slot-grid-line"></div>
                 ))}
                 {dayLessons.map(lesson => {
+                  if (!lesson.dateTime || !lesson.dateTime.includes(' • ')) return null;
                   const timeStr = lesson.dateTime.split(' • ')[1];
                   const [hours, minutes] = timeStr.split(':').map(Number);
                   const startMinutes = (hours * 60) + minutes;
@@ -164,7 +187,7 @@ function SchedulePage() {
                       key={lesson.id} 
                       className="week-lesson-block"
                       style={{ top: `${top}px`, height: `${height}px` }}
-                      onClick={() => navigate(`/lessons/${lesson.id}`)}
+                      onClick={() => navigate(`/lessons/${lesson.id}`, { state: { from: 'schedule' } })}
                     >
                       <span className="lesson-time">{timeStr}</span>
                       <span className="lesson-title">{lesson.title}</span>
@@ -184,9 +207,20 @@ function SchedulePage() {
       <Topbar 
         title="Schedule" 
         subtitle="Upcoming sessions and key dates." 
+        onMenuToggle={onMenuToggle}
       />
       <div className="calendar-controls-container">
         <div className="calendar-controls">
+          <div className="calendar-nav">
+            <button className="page-button" onClick={() => changePeriod(-1)}>&lt;</button>
+            <span className="calendar-current-month">
+              {view === 'month' 
+                ? `${monthNames[month]} ${year}` 
+                : `Week of ${monthNames[startOfWeek.getMonth()]} ${startOfWeek.getDate()}`
+              }
+            </span>
+            <button className="page-button" onClick={() => changePeriod(1)}>&gt;</button>
+          </div>
           <div className="view-selector">
             <button 
               className={`view-button ${view === 'month' ? 'active' : ''}`}
@@ -201,21 +235,47 @@ function SchedulePage() {
               Week
             </button>
           </div>
-          <div className="calendar-nav">
-            <button className="page-button" onClick={() => changePeriod(-1)}>&lt;</button>
-            <span className="calendar-current-month">
-              {view === 'month' 
-                ? `${monthNames[month]} ${year}` 
-                : `Week of ${monthNames[startOfWeek.getMonth()]} ${startOfWeek.getDate()}`
-              }
-            </span>
-            <button className="page-button" onClick={() => changePeriod(1)}>&gt;</button>
-          </div>
         </div>
       </div>
 
-      <div className="calendar-panel">
-        {view === 'month' ? renderMonthView() : renderWeekView()}
+      <div className="calendar-layout">
+        <div className="calendar-main">
+          <div className="calendar-panel">
+            {view === 'month' ? renderMonthView() : renderWeekView()}
+          </div>
+        </div>
+        
+        <aside className="unscheduled-sidebar">
+          <div className="sidebar-header">
+            <h3>Unscheduled</h3>
+            {unscheduledLessons.length > 0 && (
+              <button className="schedule-all-btn" onClick={handleScheduleAll}>
+                Schedule All
+              </button>
+            )}
+          </div>
+          <div className="unscheduled-list">
+            {unscheduledLessons.length === 0 ? (
+              <p className="empty-msg">No unscheduled lessons.</p>
+            ) : (
+              unscheduledLessons.map(lesson => (
+                <div key={lesson.id} className="unscheduled-item">
+                  <div className="unscheduled-info">
+                    <p className="unscheduled-title">{lesson.title}</p>
+                    <p className="unscheduled-meta">Proposed: {lesson.proposedTime}</p>
+                  </div>
+                  <button 
+                    className="add-to-schedule-btn"
+                    onClick={() => handleScheduleLesson(lesson.id)}
+                    title="Add to Schedule"
+                  >
+                    +
+                  </button>
+                </div>
+              ))
+            )}
+          </div>
+        </aside>
       </div>
     </section>
   );

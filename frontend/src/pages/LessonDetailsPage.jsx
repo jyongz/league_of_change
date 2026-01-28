@@ -1,12 +1,15 @@
 import React from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { lessons } from '../data/lessons';
 import Topbar from '../components/Topbar';
 
-function LessonDetailsPage() {
+function LessonDetailsPage({ onMenuToggle }) {
   const { lessonId } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const lesson = lessons.find((item) => item.id === lessonId);
+
+  const fromSchedule = location.state?.from === 'schedule';
 
   if (!lesson) {
     return (
@@ -14,10 +17,13 @@ function LessonDetailsPage() {
         <Topbar 
           title="Lesson Not Found" 
           subtitle="We couldn’t find that lesson." 
+          onMenuToggle={onMenuToggle}
         />
-        <button className="ghost" onClick={() => navigate('/lessons')}>
-          Back to Lessons
-        </button>
+        <div className="detail-header-actions">
+          <button className="ghost" onClick={() => navigate(fromSchedule ? '/schedule' : '/lessons')}>
+            {fromSchedule ? 'Back to Schedule' : 'Back to Lessons'}
+          </button>
+        </div>
       </section>
     );
   }
@@ -27,10 +33,11 @@ function LessonDetailsPage() {
       <Topbar 
         title={lesson.title} 
         subtitle={`Lesson ID: ${lesson.id}`} 
+        onMenuToggle={onMenuToggle}
       />
       <div className="detail-header-actions">
-        <button className="ghost" onClick={() => navigate('/lessons')}>
-          Back to Lessons
+        <button className="ghost" onClick={() => navigate(fromSchedule ? '/schedule' : '/lessons')}>
+          {fromSchedule ? 'Back to Schedule' : 'Back to Lessons'}
         </button>
       </div>
 

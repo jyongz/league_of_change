@@ -1,18 +1,18 @@
 import React from 'react';
 
-function MomentumTracker() {
+function AttendanceRate() {
   const stats = [
-    { label: 'Outreach', width: '78%' },
-    { label: 'Participation', width: '64%' },
-    { label: 'Retention', width: '52%' },
-    { label: 'Outcomes', width: '86%' },
+    { label: 'LSN-204 (Foundations)', width: '92%' },
+    { label: 'LSN-219 (Movement Lab)', width: '85%' },
+    { label: 'LSN-231 (Creative Flow)', width: '98%' },
+    { label: 'LSN-244 (Footwork)', width: '78%' },
   ];
 
   return (
     <div className="panel">
       <header className="panel-header">
-        <h3>Momentum Tracker</h3>
-        <span className="panel-chip">Live</span>
+        <h3>Attendance Rate</h3>
+        <span className="panel-chip">Last 4 Lessons</span>
       </header>
       <div className="momentum">
         {stats.map((stat) => (
@@ -28,4 +28,4 @@ function MomentumTracker() {
   );
 }
 
-export default MomentumTracker;
+export default AttendanceRate;
