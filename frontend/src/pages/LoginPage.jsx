@@ -59,7 +59,7 @@ function LoginPage() {
         </form>
 
         <p className="login-hint">
-          Demo: Admin123 / Password!
+          Demo: Admin123 (Admin), Coach123 (Coach), Fundraiser123 (Viewer) / Password!
         </p>
       </div>
     </div>

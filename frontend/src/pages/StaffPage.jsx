@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import Topbar from '../components/Topbar';
+import { useAuth } from '../context/AuthContext';
+import { Navigate } from 'react-router-dom';
 
 function StaffPage({ onMenuToggle }) {
+  const { user } = useAuth();
+  const isAdmin = user && user.role === 'admin';
+
   const [staffData, setStaffData] = useState([
     { id: 'STF-001', canAddLessons: true, canScheduleLessons: true, canAdjustPermissions: false },
     { id: 'STF-002', canAddLessons: true, canScheduleLessons: false, canAdjustPermissions: false },
@@ -15,6 +20,10 @@ function StaffPage({ onMenuToggle }) {
       staff.id === id ? { ...staff, [field]: !staff[field] } : staff
     ));
   };
+
+  if (!isAdmin) {
+    return <Navigate to="/" replace />;
+  }
 
   return (
     <section className="page">

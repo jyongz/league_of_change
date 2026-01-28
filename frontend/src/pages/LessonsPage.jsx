@@ -2,9 +2,12 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { lessons, PAGE_SIZE } from '../data/lessons';
 import Topbar from '../components/Topbar';
+import { useAuth } from '../context/AuthContext';
 
 function LessonsPage({ onMenuToggle }) {
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const canEdit = user && (user.role === 'admin' || user.role === 'coach');
 
   const [lessonIdQuery, setLessonIdQuery] = useState('');
   const [lessonTitleQuery, setLessonTitleQuery] = useState('');
@@ -174,9 +177,11 @@ function LessonsPage({ onMenuToggle }) {
       />
 
       <div className="page-actions">
-        <button className="cta-button" onClick={handleOpenCreateModal}>
-          + New Lesson
-        </button>
+        {canEdit && (
+          <button className="cta-button" onClick={handleOpenCreateModal}>
+            + New Lesson
+          </button>
+        )}
       </div>
 
       <div className="panel">
@@ -306,15 +311,19 @@ function LessonsPage({ onMenuToggle }) {
                               setActiveMenuId(null);
                               navigate(`/lessons/${lesson.id}`);
                             }}>View</button>
-                            <button onClick={(e) => {
-                              e.stopPropagation();
-                              setActiveMenuId(null);
-                              handleOpenEditModal(lesson);
-                            }}>Edit</button>
-                            <button className="delete" onClick={(e) => {
-                              e.stopPropagation();
-                              setActiveMenuId(null);
-                            }}>Delete</button>
+                            {canEdit && (
+                              <>
+                                <button onClick={(e) => {
+                                  e.stopPropagation();
+                                  setActiveMenuId(null);
+                                  handleOpenEditModal(lesson);
+                                }}>Edit</button>
+                                <button className="delete" onClick={(e) => {
+                                  e.stopPropagation();
+                                  setActiveMenuId(null);
+                                }}>Delete</button>
+                              </>
+                            )}
                           </div>
                         )}
                       </div>

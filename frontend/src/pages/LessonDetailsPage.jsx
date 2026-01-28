@@ -2,11 +2,14 @@ import React, { useState } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { lessons } from '../data/lessons';
 import Topbar from '../components/Topbar';
+import { useAuth } from '../context/AuthContext';
 
 function LessonDetailsPage({ onMenuToggle }) {
   const { lessonId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
+  const { user } = useAuth();
+  const canEdit = user && (user.role === 'admin' || user.role === 'coach');
   const lesson = lessons.find((item) => item.id === lessonId);
 
   const [lessonOverview, setLessonOverview] = useState(lesson?.description || []);
@@ -106,14 +109,16 @@ function LessonDetailsPage({ onMenuToggle }) {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
             <h3 style={{ margin: 0 }}>Overview</h3>
             <div style={{ display: 'flex', gap: '8px' }}>
-              {(lessonOverview.length === 0 && lessonFiles.length === 0) && (
+              {canEdit && lessonOverview.length === 0 && lessonFiles.length === 0 && (
                 <button className="cta-button" style={{ fontSize: '12px', padding: '6px 12px' }} onClick={() => setIsModalOpen(true)}>
                   Generate Plan
                 </button>
               )}
-              <button className="ghost" style={{ fontSize: '12px', padding: '6px 12px' }} onClick={() => {}}>
-                Edit
-              </button>
+              {canEdit && (
+                <button className="ghost" style={{ fontSize: '12px', padding: '6px 12px' }} onClick={() => {}}>
+                  Edit
+                </button>
+              )}
             </div>
           </div>
           {lessonOverview.length > 0 ? (
@@ -129,9 +134,11 @@ function LessonDetailsPage({ onMenuToggle }) {
       <div className="panel">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
           <h3 className="panel-title" style={{ margin: 0 }}>Related Files</h3>
-          <button className="ghost" style={{ fontSize: '12px', padding: '6px 12px' }} onClick={() => {}}>
-            Add File
-          </button>
+          {canEdit && (
+            <button className="ghost" style={{ fontSize: '12px', padding: '6px 12px' }} onClick={() => {}}>
+              Add File
+            </button>
+          )}
         </div>
         {lessonFiles.length > 0 ? (
           <ul className="file-list">

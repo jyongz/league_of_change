@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import { lessons } from '../data/lessons';
 import { useNavigate } from 'react-router-dom';
 import Topbar from '../components/Topbar';
+import { useAuth } from '../context/AuthContext';
 
 function SchedulePage({ onMenuToggle }) {
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const canEdit = user && (user.role === 'admin' || user.role === 'coach');
   const [currentDate, setCurrentDate] = useState(new Date(2026, 1, 1)); // Default to February 2026 as per data
   const [view, setView] = useState('month');
   const [localLessons, setLocalLessons] = useState(lessons);
@@ -297,7 +300,7 @@ function SchedulePage({ onMenuToggle }) {
         <aside className="unscheduled-sidebar">
           <div className="sidebar-header">
             <h3>Unscheduled</h3>
-            {unscheduledLessons.length > 0 && (
+            {canEdit && unscheduledLessons.length > 0 && (
               <button className="schedule-all-btn" onClick={handleScheduleAll}>
                 Schedule All
               </button>
@@ -313,21 +316,25 @@ function SchedulePage({ onMenuToggle }) {
                     <p className="unscheduled-title">{lesson.title}</p>
                     <p className="unscheduled-meta">
                       Proposed: {lesson.proposedTime}
-                      <button 
-                        className="edit-proposed-btn" 
-                        onClick={() => handleOpenEditModal(lesson)}
-                      >
-                        Edit
-                      </button>
+                      {canEdit && (
+                        <button 
+                          className="edit-proposed-btn" 
+                          onClick={() => handleOpenEditModal(lesson)}
+                        >
+                          Edit
+                        </button>
+                      )}
                     </p>
                   </div>
-                  <button 
-                    className="add-to-schedule-btn"
-                    onClick={() => handleScheduleLesson(lesson.id)}
-                    title="Add to Schedule"
-                  >
-                    +
-                  </button>
+                  {canEdit && (
+                    <button 
+                      className="add-to-schedule-btn"
+                      onClick={() => handleScheduleLesson(lesson.id)}
+                      title="Add to Schedule"
+                    >
+                      +
+                    </button>
+                  )}
                 </div>
               ))
             )}

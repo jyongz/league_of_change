@@ -1,9 +1,12 @@
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { lessons } from '../data/lessons';
+import { useAuth } from '../context/AuthContext';
 
 function Sidebar({ isMobileMenuOpen, onLinkClick }) {
   const navigate = useNavigate();
+  const { user, logout } = useAuth();
+  const isAdmin = user && user.role === 'admin';
 
   const handleLinkClick = () => {
     if (onLinkClick) onLinkClick();
@@ -60,10 +63,32 @@ function Sidebar({ isMobileMenuOpen, onLinkClick }) {
         <NavLink className="nav-item" to="/progress" onClick={handleLinkClick}>
           Progress
         </NavLink>
-        <NavLink className="nav-item" to="/staff" onClick={handleLinkClick}>
-          Staff
-        </NavLink>
+        {isAdmin && (
+          <NavLink className="nav-item" to="/staff" onClick={handleLinkClick}>
+            Staff
+          </NavLink>
+        )}
       </nav>
+
+      <div className="sidebar-footer" style={{ padding: '16px', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+        <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.6)', marginBottom: '8px' }}>
+          Logged in as: <br/><strong>{user?.name}</strong> ({user?.role})
+        </p>
+        <button 
+          onClick={logout} 
+          style={{ 
+            background: 'none', 
+            border: '1px solid rgba(255,255,255,0.3)', 
+            color: 'white', 
+            width: '100%', 
+            padding: '8px', 
+            borderRadius: '4px',
+            cursor: 'pointer'
+          }}
+        >
+          Logout
+        </button>
+      </div>
 
       <div className="sidebar-card">
         <p className="sidebar-label">Next drop</p>
