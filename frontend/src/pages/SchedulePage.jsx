@@ -170,6 +170,15 @@ function SchedulePage({ onMenuToggle }) {
 
   const unscheduledLessons = localLessons.filter(l => !l.dateTime);
 
+  const getCategoryIcon = (category) => {
+    switch (category) {
+      case 'English': return '📚';
+      case 'Math': return '📐';
+      case 'Sports': return '⚽';
+      default: return '📝';
+    }
+  };
+
   const renderMonthView = () => (
     <div className="calendar-grid">
       {daysOfWeek.map(day => (
@@ -187,9 +196,10 @@ function SchedulePage({ onMenuToggle }) {
               {dayLessons.map(lesson => (
                 <div 
                   key={lesson.id} 
-                  className="calendar-lesson-tag"
+                  className={`calendar-lesson-tag category-${lesson.category?.toLowerCase()}`}
                   onClick={() => navigate(`/lessons/${lesson.id}`, { state: { from: 'schedule' } })}
                 >
+                  <span className="lesson-category-icon">{getCategoryIcon(lesson.category)}</span>
                   <span className="lesson-time">{lesson.dateTime?.includes(' • ') ? lesson.dateTime.split(' • ')[1] : ''}</span>
                   <span className="lesson-title">{lesson.title}</span>
                 </div>
@@ -234,12 +244,15 @@ function SchedulePage({ onMenuToggle }) {
                   return (
                     <div 
                       key={lesson.id} 
-                      className="week-lesson-block"
+                      className={`week-lesson-block category-${lesson.category?.toLowerCase()}`}
                       style={{ top: `${top}px`, height: `${height}px` }}
                       onClick={() => navigate(`/lessons/${lesson.id}`, { state: { from: 'schedule' } })}
                     >
-                      <span className="lesson-time">{timeStr}</span>
-                      <span className="lesson-title">{lesson.title}</span>
+                      <div className="week-lesson-content">
+                        <span className="lesson-category-icon">{getCategoryIcon(lesson.category)}</span>
+                        <span className="lesson-time">{timeStr}</span>
+                        <span className="lesson-title">{lesson.title}</span>
+                      </div>
                     </div>
                   );
                 })}
