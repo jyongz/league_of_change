@@ -37,7 +37,7 @@ function OverviewPage({ onMenuToggle }) {
   return (
     <>
       <Topbar 
-        title="Lessons Overview"
+        title="Dashboard"
         subtitle="View and manage lessons at a glance."
         onMenuToggle={onMenuToggle}
       />

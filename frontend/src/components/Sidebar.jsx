@@ -52,7 +52,7 @@ function Sidebar({ isMobileMenuOpen, onLinkClick }) {
 
       <nav className="nav">
         <NavLink className="nav-item" to="/" end onClick={handleLinkClick}>
-          Overview
+          Dashboard
         </NavLink>
         <NavLink className="nav-item" to="/lessons" onClick={handleLinkClick}>
           Lessons
@@ -64,9 +64,14 @@ function Sidebar({ isMobileMenuOpen, onLinkClick }) {
           Progress
         </NavLink>
         {isAdmin && (
-          <NavLink className="nav-item" to="/staff" onClick={handleLinkClick}>
-            Staff
-          </NavLink>
+          <>
+            <NavLink className="nav-item" to="/staff" onClick={handleLinkClick}>
+              Staff
+            </NavLink>
+            <NavLink className="nav-item" to="/health" onClick={handleLinkClick}>
+              Service Health
+            </NavLink>
+          </>
         )}
       </nav>
 

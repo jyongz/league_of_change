@@ -8,6 +8,7 @@ function LessonsPage({ onMenuToggle }) {
   const navigate = useNavigate();
   const { user } = useAuth();
   const canEdit = user && (user.role === 'admin' || user.role === 'coach');
+  const isAdmin = user && user.role === 'admin';
 
   const [lessonIdQuery, setLessonIdQuery] = useState('');
   const [lessonTitleQuery, setLessonTitleQuery] = useState('');
@@ -270,30 +271,55 @@ function LessonsPage({ onMenuToggle }) {
                   </select>
                 </th>
                 <th>Staff ID</th>
+                {isAdmin && (
+                  <>
+                    <th>Attendance Rate</th>
+                    <th>Average Score</th>
+                    <th>Completion Rate</th>
+                    <th>Lesson Rating</th>
+                  </>
+                )}
                 <th style={{ width: '40px' }}></th>
               </tr>
             </thead>
             <tbody>
               {pagedLessons.length === 0 ? (
                 <tr>
-                  <td colSpan="8" className="empty-state">
+                  <td colSpan={isAdmin ? "12" : "8"} className="empty-state">
                     No lessons match your filters.
                   </td>
                 </tr>
               ) : (
-                pagedLessons.map((lesson) => (
-                  <tr
-                    key={lesson.id}
-                    className="table-row"
-                  >
-                    <td onClick={() => navigate(`/lessons/${lesson.id}`)}>{lesson.id}</td>
-                    <td onClick={() => navigate(`/lessons/${lesson.id}`)}>{lesson.title}</td>
-                    <td onClick={() => navigate(`/lessons/${lesson.id}`)}>{lesson.category}</td>
-                    <td onClick={() => navigate(`/lessons/${lesson.id}`)}>{lesson.dateTime}</td>
-                    <td onClick={() => navigate(`/lessons/${lesson.id}`)}>{lesson.difficulty}</td>
-                    <td onClick={() => navigate(`/lessons/${lesson.id}`)}>{lesson.location}</td>
-                    <td onClick={() => navigate(`/lessons/${lesson.id}`)}>{lesson.staff}</td>
-                    <td className="actions-cell">
+                pagedLessons.map((lesson) => {
+                  const rating = isAdmin 
+                    ? (lesson.attendanceRate * 0.2 + lesson.averageScore * 0.3 + lesson.completionRate * 0.5).toFixed(1)
+                    : null;
+                  
+                  return (
+                    <tr
+                      key={lesson.id}
+                      className="table-row"
+                    >
+                      <td onClick={() => navigate(`/lessons/${lesson.id}`)}>{lesson.id}</td>
+                      <td onClick={() => navigate(`/lessons/${lesson.id}`)}>{lesson.title}</td>
+                      <td onClick={() => navigate(`/lessons/${lesson.id}`)}>{lesson.category}</td>
+                      <td onClick={() => navigate(`/lessons/${lesson.id}`)}>{lesson.dateTime}</td>
+                      <td onClick={() => navigate(`/lessons/${lesson.id}`)}>{lesson.difficulty}</td>
+                      <td onClick={() => navigate(`/lessons/${lesson.id}`)}>{lesson.location}</td>
+                      <td onClick={() => navigate(`/lessons/${lesson.id}`)}>{lesson.staff}</td>
+                      {isAdmin && (
+                        <>
+                          <td onClick={() => navigate(`/lessons/${lesson.id}`)}>{lesson.attendanceRate}%</td>
+                          <td onClick={() => navigate(`/lessons/${lesson.id}`)}>{lesson.averageScore}</td>
+                          <td onClick={() => navigate(`/lessons/${lesson.id}`)}>{lesson.completionRate}%</td>
+                          <td onClick={() => navigate(`/lessons/${lesson.id}`)}>
+                            <span className={`rating-badge ${rating > 80 ? 'high' : rating > 50 ? 'medium' : 'low'}`}>
+                              {rating}
+                            </span>
+                          </td>
+                        </>
+                      )}
+                      <td className="actions-cell">
                       <div className="action-menu-container">
                         <button 
                           className="action-dots"
@@ -329,10 +355,11 @@ function LessonsPage({ onMenuToggle }) {
                       </div>
                     </td>
                   </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+                );
+              })
+            )}
+          </tbody>
+        </table>
         </div>
 
         <div className="pagination">

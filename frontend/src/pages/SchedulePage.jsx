@@ -10,6 +10,7 @@ function SchedulePage({ onMenuToggle }) {
   const canEdit = user && (user.role === 'admin' || user.role === 'coach');
   const [currentDate, setCurrentDate] = useState(new Date(2026, 1, 1)); // Default to February 2026 as per data
   const [view, setView] = useState('month');
+  const [scheduleType, setScheduleType] = useState('global');
   const [localLessons, setLocalLessons] = useState(lessons);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingLesson, setEditingLesson] = useState(null);
@@ -68,6 +69,11 @@ function SchedulePage({ onMenuToggle }) {
 
   const calendarDays = [...prevMonthPadding, ...currentMonthDays, ...nextMonthPadding];
 
+  // --- Display Filtering ---
+  const displayLessons = scheduleType === 'personal' && user?.staffId
+    ? localLessons.filter(l => l.staff === user.staffId)
+    : localLessons;
+
   // --- Week View Logic ---
   const startOfWeek = new Date(currentDate);
   startOfWeek.setDate(currentDate.getDate() - currentDate.getDay());
@@ -95,7 +101,7 @@ function SchedulePage({ onMenuToggle }) {
   };
 
   const getLessonsForDay = (day, m, y) => {
-    return localLessons.filter(lesson => {
+    return displayLessons.filter(lesson => {
       if (!lesson.dateTime || !lesson.dateTime.includes(' • ')) return false;
       const parts = lesson.dateTime.split(' • ');
       const dateParts = parts[0].split(' '); // ['Feb', '04']
@@ -171,7 +177,7 @@ function SchedulePage({ onMenuToggle }) {
     }));
   };
 
-  const unscheduledLessons = localLessons.filter(l => !l.dateTime);
+  const unscheduledLessons = displayLessons.filter(l => !l.dateTime);
 
   const renderMonthView = () => (
     <div className="calendar-grid">
@@ -287,6 +293,22 @@ function SchedulePage({ onMenuToggle }) {
               Week
             </button>
           </div>
+          {canEdit && (
+            <div className="view-selector" style={{ marginLeft: '12px' }}>
+              <button 
+                className={`view-button ${scheduleType === 'global' ? 'active' : ''}`}
+                onClick={() => setScheduleType('global')}
+              >
+                Global
+              </button>
+              <button 
+                className={`view-button ${scheduleType === 'personal' ? 'active' : ''}`}
+                onClick={() => setScheduleType('personal')}
+              >
+                Personal
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
@@ -297,36 +319,34 @@ function SchedulePage({ onMenuToggle }) {
           </div>
         </div>
         
-        <aside className="unscheduled-sidebar">
-          <div className="sidebar-header">
-            <h3>Unscheduled</h3>
-            {canEdit && unscheduledLessons.length > 0 && (
-              <button className="schedule-all-btn" onClick={handleScheduleAll}>
-                Schedule All
-              </button>
-            )}
-          </div>
-          <div className="unscheduled-list">
-            {unscheduledLessons.length === 0 ? (
-              <p className="empty-msg">No unscheduled lessons.</p>
-            ) : (
-              unscheduledLessons.map(lesson => (
-                <div key={lesson.id} className="unscheduled-item">
-                  <div className="unscheduled-info">
-                    <p className="unscheduled-title">{lesson.title}</p>
-                    <p className="unscheduled-meta">
-                      Proposed: {lesson.proposedTime}
-                      {canEdit && (
+        {canEdit && (
+          <aside className="unscheduled-sidebar">
+            <div className="sidebar-header">
+              <h3>Unscheduled</h3>
+              {unscheduledLessons.length > 0 && (
+                <button className="schedule-all-btn" onClick={handleScheduleAll}>
+                  Schedule All
+                </button>
+              )}
+            </div>
+            <div className="unscheduled-list">
+              {unscheduledLessons.length === 0 ? (
+                <p className="empty-msg">No unscheduled lessons.</p>
+              ) : (
+                unscheduledLessons.map(lesson => (
+                  <div key={lesson.id} className="unscheduled-item">
+                    <div className="unscheduled-info">
+                      <p className="unscheduled-title">{lesson.title}</p>
+                      <p className="unscheduled-meta">
+                        Proposed: {lesson.proposedTime}
                         <button 
                           className="edit-proposed-btn" 
                           onClick={() => handleOpenEditModal(lesson)}
                         >
                           Edit
                         </button>
-                      )}
-                    </p>
-                  </div>
-                  {canEdit && (
+                      </p>
+                    </div>
                     <button 
                       className="add-to-schedule-btn"
                       onClick={() => handleScheduleLesson(lesson.id)}
@@ -334,12 +354,12 @@ function SchedulePage({ onMenuToggle }) {
                     >
                       +
                     </button>
-                  )}
-                </div>
-              ))
-            )}
-          </div>
-        </aside>
+                  </div>
+                ))
+              )}
+            </div>
+          </aside>
+        )}
       </div>
       
       {isEditModalOpen && (

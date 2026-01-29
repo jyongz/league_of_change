@@ -1034,6 +1034,28 @@
   background: var(--color-bg-alt);
 }
 
+.rating-badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.rating-badge.high {
+  background: rgba(40, 167, 69, 0.2);
+  color: #28a745;
+}
+
+.rating-badge.medium {
+  background: rgba(255, 193, 7, 0.2);
+  color: #ffc107;
+}
+
+.rating-badge.low {
+  background: rgba(220, 53, 69, 0.2);
+  color: #dc3545;
+}
+
 .pagination {
   display: flex;
   align-items: center;
