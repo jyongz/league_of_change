@@ -11,6 +11,7 @@ import StaffPage from './pages/StaffPage';
 import ServiceHealthPage from './pages/ServiceHealthPage';
 import LoginPage from './pages/LoginPage';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { ThemeProvider, useTheme } from './context/ThemeContext';
 
 function AppContent() {
   const { isAuthenticated } = useAuth();
@@ -45,9 +46,11 @@ function AppContent() {
 function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
-        <AppContent />
-      </BrowserRouter>
+      <ThemeProvider>
+        <BrowserRouter>
+          <AppContent />
+        </BrowserRouter>
+      </ThemeProvider>
     </AuthProvider>
   );
 }

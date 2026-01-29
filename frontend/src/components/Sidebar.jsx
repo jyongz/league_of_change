@@ -2,10 +2,13 @@ import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { lessons } from '../data/lessons';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
+import logo from '../assets/logo.png';
 
 function Sidebar({ isMobileMenuOpen, onLinkClick }) {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const isAdmin = user && user.role === 'admin';
 
   const handleLinkClick = () => {
@@ -43,7 +46,7 @@ function Sidebar({ isMobileMenuOpen, onLinkClick }) {
         </button>
       )}
       <div className="brand">
-        <span className="brand-mark">LC</span>
+        <img src={logo} alt="Street League Logo" className="brand-logo" />
         <div className="brand-text">
           <p className="brand-title">Street League</p>
           <p className="brand-subtitle">Dashboard</p>
@@ -76,9 +79,31 @@ function Sidebar({ isMobileMenuOpen, onLinkClick }) {
       </nav>
 
       <div className="sidebar-footer" style={{ padding: '16px', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-        <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.6)', marginBottom: '8px' }}>
+        <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.6)', marginBottom: '12px' }}>
           Logged in as: <br/><strong>{user?.name}</strong> ({user?.role})
         </p>
+        
+        <div style={{ marginBottom: '16px' }}>
+          <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', marginBottom: '8px' }}>Theme</p>
+          <button 
+            onClick={toggleTheme}
+            style={{ 
+              background: theme === 'street-league' ? 'var(--color-accent)' : 'rgba(255,255,255,0.1)', 
+              border: 'none', 
+              color: theme === 'street-league' ? 'var(--color-text-invert)' : 'white', 
+              width: '100%', 
+              padding: '8px', 
+              borderRadius: '4px',
+              cursor: 'pointer',
+              fontSize: '12px',
+              fontWeight: '600',
+              transition: 'all 0.2s'
+            }}
+          >
+            {theme === 'street-league' ? 'Street League Theme' : 'Default Theme'}
+          </button>
+        </div>
+
         <button 
           onClick={logout} 
           style={{ 

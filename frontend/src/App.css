@@ -77,15 +77,11 @@
   align-items: center;
 }
 
-.brand-mark {
+.brand-logo {
   width: 46px;
-  height: 46px;
-  border: 2px solid var(--color-brand);
-  color: var(--color-brand);
-  display: grid;
-  place-items: center;
-  font-weight: 700;
-  letter-spacing: 1px;
+  height: auto;
+  min-width: 10mm;
+  display: block;
 }
 
 .brand-title {
@@ -787,8 +783,8 @@
 }
 
 .primary {
-  background: #9cff1a;
-  color: #0b0b0f;
+  background: var(--color-accent);
+  color: var(--color-text-invert);
   border: none;
 }
 

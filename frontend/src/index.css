@@ -24,10 +24,33 @@
   --color-surface-hover: #1c2230;
 }
 
+.street-league-theme {
+  --color-bg: #1E2024;
+  --color-bg-alt: #262E3C;
+  --color-surface: #3C4756;
+  --color-surface-alt: #465161;
+  --color-border: #4A5568;
+  --color-border-strong: #546175;
+  --color-border-nav: #343e4d;
+  --color-text: #f4f4f5;
+  --color-text-muted: #a1a1aa;
+  --color-text-soft: #d4d4d8;
+  --color-text-ghost: #e4e4e7;
+  --color-text-invert: #1E2024;
+  --color-accent: #A8915A;
+  --color-accent-alt: #C9B893;
+  --color-danger: #ff4d4f;
+  --color-menu-border: #3C4756;
+  --color-badge-border: #4A5568;
+  --color-brand: #A8915A;
+  --color-primary: #A8915A;
+  --color-surface-hover: #465161;
+}
+
 body {
   margin: 0;
-  background: #0b0b0f;
-  color: #f4f4f5;
+  background: var(--color-bg);
+  color: var(--color-text);
   font-family: 'Oswald', 'Segoe UI', system-ui, sans-serif;
   letter-spacing: 0.2px;
 }

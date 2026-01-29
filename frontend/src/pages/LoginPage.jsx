@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
+import logo from '../assets/logo.png';
 
 function LoginPage() {
   const [username, setUsername] = useState('');
@@ -20,7 +21,7 @@ function LoginPage() {
     <div className="login-container">
       <div className="login-box">
         <div className="brand login-brand">
-          <span className="brand-mark">LC</span>
+          <img src={logo} alt="Street League Logo" className="brand-logo" />
           <div className="brand-text">
             <p className="brand-title">Street League</p>
             <p className="brand-subtitle">Portal Access</p>
