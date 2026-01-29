@@ -9,6 +9,8 @@ import SchedulePage from './pages/SchedulePage';
 import ProgressPage from './pages/ProgressPage';
 import StaffPage from './pages/StaffPage';
 import ServiceHealthPage from './pages/ServiceHealthPage';
+import ProfilePage from './pages/ProfilePage';
+import SettingsPage from './pages/SettingsPage';
 import LoginPage from './pages/LoginPage';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
@@ -37,6 +39,8 @@ function AppContent() {
           <Route path="/progress" element={<ProgressPage onMenuToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)} />} />
           <Route path="/staff" element={<StaffPage onMenuToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)} />} />
           <Route path="/health" element={<ServiceHealthPage onMenuToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)} />} />
+          <Route path="/profile" element={<ProfilePage onMenuToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)} />} />
+          <Route path="/settings" element={<SettingsPage onMenuToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)} />} />
         </Routes>
       </main>
     </div>

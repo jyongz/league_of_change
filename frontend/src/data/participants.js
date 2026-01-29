@@ -4,6 +4,7 @@ export const participants = [
     name: 'P-001',
     age: 17,
     attendance: 92,
+    averageScore: 88,
     location: 'Hackney',
     careerGoal: 'Software Engineer',
     attendanceRecords: [
@@ -21,6 +22,7 @@ export const participants = [
     name: 'P-002',
     age: 16,
     attendance: 85,
+    averageScore: 76,
     location: 'Brixton',
     careerGoal: 'Professional Dancer',
     attendanceRecords: [
@@ -36,6 +38,7 @@ export const participants = [
     name: 'P-003',
     age: 18,
     attendance: 98,
+    averageScore: 94,
     location: 'Hackney',
     careerGoal: 'Community Leader',
     attendanceRecords: [
@@ -54,6 +57,7 @@ export const participants = [
     name: 'P-004',
     age: 15,
     attendance: 78,
+    averageScore: 68,
     location: 'Camden',
     careerGoal: 'Sports Coach',
     attendanceRecords: [
@@ -69,6 +73,7 @@ export const participants = [
     name: 'P-005',
     age: 17,
     attendance: 100,
+    averageScore: 92,
     location: 'Hackney',
     careerGoal: 'Professional Choreographer',
     attendanceRecords: [
@@ -85,6 +90,7 @@ export const participants = [
     name: 'P-006',
     age: 19,
     attendance: 65,
+    averageScore: 70,
     location: 'Brixton',
     careerGoal: 'Music Producer',
     attendanceRecords: [
@@ -100,6 +106,7 @@ export const participants = [
     name: 'P-007',
     age: 16,
     attendance: 88,
+    averageScore: 82,
     location: 'Camden',
     careerGoal: 'Event Coordinator',
     attendanceRecords: [
@@ -115,6 +122,7 @@ export const participants = [
     name: 'P-008',
     age: 18,
     attendance: 95,
+    averageScore: 90,
     location: 'Hackney',
     careerGoal: 'Stunt Performer',
     attendanceRecords: [

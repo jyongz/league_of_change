@@ -92,6 +92,7 @@ function ProgressPage({ onMenuToggle }) {
                     </select>
                   </th>
                   <th>Attendance %</th>
+                  <th>Average Score</th>
                 </tr>
               </thead>
               <tbody>
@@ -115,11 +116,12 @@ function ProgressPage({ onMenuToggle }) {
                         <span>{p.attendance}%</span>
                       </div>
                     </td>
+                    <td>{p.averageScore}</td>
                   </tr>
                 ))}
                 {pagedParticipants.length === 0 && (
                   <tr>
-                    <td colSpan="4" style={{ textAlign: 'center', padding: '24px' }}>
+                    <td colSpan="5" style={{ textAlign: 'center', padding: '24px' }}>
                       No participants found matching your criteria.
                     </td>
                   </tr>

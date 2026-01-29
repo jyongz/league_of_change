@@ -3,9 +3,9 @@ import React, { createContext, useState, useContext } from 'react';
 const AuthContext = createContext(null);
 
 const DEMO_USERS = [
-  { username: 'Coach123', password: 'Password!', role: 'coach', name: 'Alex Coach', staffId: 'STF-001' },
-  { username: 'Admin123', password: 'Password!', role: 'admin', name: 'Jordan Admin', staffId: 'STF-003' },
-  { username: 'Fundraiser123', password: 'Password!', role: 'viewer', name: 'Sam Viewer' },
+  { username: 'Coach123', password: 'Password!', role: 'coach', name: 'Alex A', staffId: 'STF-001' },
+  { username: 'Admin123', password: 'Password!', role: 'admin', name: 'Charles L', staffId: 'STF-003' },
+  { username: 'Fundraiser123', password: 'Password!', role: 'viewer', name: 'Max V' },
 ];
 
 export const AuthProvider = ({ children }) => {

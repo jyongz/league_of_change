@@ -1,8 +1,10 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 function Topbar({ title, subtitle, onMenuToggle }) {
   const { logout } = useAuth();
+  const navigate = useNavigate();
 
   return (
     <header className="topbar">
@@ -26,8 +28,8 @@ function Topbar({ title, subtitle, onMenuToggle }) {
             <span className="hamburger" />
           </summary>
           <div className="menu-list">
-            <button className="menu-item">Profile</button>
-            <button className="menu-item">Settings</button>
+            <button className="menu-item" onClick={() => navigate('/profile')}>Profile</button>
+            <button className="menu-item" onClick={() => navigate('/settings')}>Settings</button>
             <button className="menu-item" onClick={logout}>Logout</button>
           </div>
         </details>

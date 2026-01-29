@@ -28,7 +28,8 @@ function LessonsPage({ onMenuToggle }) {
     date: '',
     time: '',
     location: '',
-    staff: ''
+    staff: '',
+    overview: ''
   });
 
   const handleOpenCreateModal = () => {
@@ -40,7 +41,8 @@ function LessonsPage({ onMenuToggle }) {
       date: '',
       time: '',
       location: '',
-      staff: 'STF-'
+      staff: 'STF-',
+      overview: ''
     });
     setIsModalOpen(true);
   };
@@ -70,9 +72,27 @@ function LessonsPage({ onMenuToggle }) {
       date: defaultDate,
       time: defaultTime,
       location: lesson.location,
-      staff: lesson.staff
+      staff: lesson.staff,
+      overview: lesson.description ? lesson.description.join('\n') : ''
     });
     setIsModalOpen(true);
+  };
+
+  const handleGenerateAI = () => {
+    // Replace with the API if there's time
+    const aiText = `AI Generated Overview for ${formData.title || 'this lesson'}:
+- Focus on key learning outcomes related to ${formData.category || 'the selected category'}.
+- Structure the session into Warm-up, Core Skills, and cool-down.
+- Ensure all safety protocols are followed for ${formData.location || 'the venue'}.`;
+    
+    setFormData(prev => ({ ...prev, overview: aiText }));
+  };
+
+  const handleUploadOCR = () => {
+    // Simulate OCR upload and decoding
+    alert("OCR feature: Select a file to scan. (System: OCR logic will decode the image and populate the overview field).");
+    // Placeholder for demo
+    setFormData(prev => ({ ...prev, overview: prev.overview + "\n[OCR DECODED TEXT: Foundations of movement and rhythmic control...]" }));
   };
 
   const handleFormChange = (e) => {
@@ -476,6 +496,26 @@ function LessonsPage({ onMenuToggle }) {
                   value={formData.staff}
                   onChange={handleFormChange}
                   required 
+                />
+              </div>
+              <div className="form-group">
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                  <label style={{ margin: 0 }}>Lesson Overview</label>
+                  <div className="tool-buttons">
+                    <button type="button" className="ghost small" onClick={handleGenerateAI} title="Generate overview using AI">
+                      Generate via AI
+                    </button>
+                    <button type="button" className="ghost small" onClick={handleUploadOCR} title="Upload image/scan to extract text">
+                      Upload
+                    </button>
+                  </div>
+                </div>
+                <textarea 
+                  name="overview"
+                  placeholder="Enter lesson overview or use automated tools..." 
+                  value={formData.overview}
+                  onChange={handleFormChange}
+                  style={{ minHeight: '120px' }}
                 />
               </div>
               <div className="form-actions">
