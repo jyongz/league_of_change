@@ -1,8 +1,17 @@
 import React from 'react';
 import Topbar from '../components/Topbar';
 import StatCard from '../components/StatCard';
+import { useAuth } from '../context/AuthContext';
+import { Navigate } from 'react-router-dom';
 
 function ServiceHealthPage({ onMenuToggle }) {
+  const { user } = useAuth();
+  const isAdmin = user && user.role === 'admin';
+
+  if (!isAdmin) {
+    return <Navigate to="/" replace />;
+  }
+
   return (
     <section className="page">
       <Topbar 

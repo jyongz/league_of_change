@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import './App.css';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import OverviewPage from './pages/OverviewPage';
 import LessonsPage from './pages/LessonsPage';
@@ -16,7 +16,8 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
 
 function AppContent() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
+  const isAdmin = user && user.role === 'admin';
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   if (!isAuthenticated) {
@@ -32,7 +33,12 @@ function AppContent() {
 
       <main className="main">
         <Routes>
-          <Route path="/" element={<OverviewPage onMenuToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)} />} />
+          <Route path="/" element={
+            isAdmin ? 
+            <ServiceHealthPage onMenuToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)} /> : 
+            <OverviewPage onMenuToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)} />
+          } />
+          <Route path="/overview" element={<OverviewPage onMenuToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)} />} />
           <Route path="/lessons" element={<LessonsPage onMenuToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)} />} />
           <Route path="/lessons/:lessonId" element={<LessonDetailsPage onMenuToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)} />} />
           <Route path="/schedule" element={<SchedulePage onMenuToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)} />} />

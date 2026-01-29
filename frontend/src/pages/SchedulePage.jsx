@@ -12,6 +12,7 @@ function SchedulePage({ onMenuToggle }) {
   const [view, setView] = useState('month');
   const [scheduleType, setScheduleType] = useState('global');
   const [localLessons, setLocalLessons] = useState(lessons);
+  const [selectedStaffId, setSelectedStaffId] = useState('all');
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingLesson, setEditingLesson] = useState(null);
   const [editFormData, setEditFormData] = useState({ date: '', time: '' });
@@ -70,9 +71,20 @@ function SchedulePage({ onMenuToggle }) {
   const calendarDays = [...prevMonthPadding, ...currentMonthDays, ...nextMonthPadding];
 
   // --- Display Filtering ---
-  const displayLessons = scheduleType === 'personal' && user?.staffId
-    ? localLessons.filter(l => l.staff === user.staffId)
-    : localLessons;
+  const staffMembers = [
+    { id: 'STF-001', name: 'Alex A' },
+    { id: 'STF-002', name: 'Sam B' },
+    { id: 'STF-003', name: 'Charles L' },
+    { id: 'STF-004', name: 'Jordan D' },
+  ];
+
+  let displayLessons = localLessons;
+
+  if (scheduleType === 'personal' && user?.staffId) {
+    displayLessons = displayLessons.filter(l => l.staff === user.staffId);
+  } else if (selectedStaffId !== 'all') {
+    displayLessons = displayLessons.filter(l => l.staff === selectedStaffId);
+  }
 
   // --- Week View Logic ---
   const startOfWeek = new Date(currentDate);
@@ -293,6 +305,27 @@ function SchedulePage({ onMenuToggle }) {
               Week
             </button>
           </div>
+          
+          <div className="calendar-nav" style={{ gap: '8px' }}>
+            <span className="page-info" style={{ marginTop: '0' }}>Staff:</span>
+            <select 
+              className="header-select" 
+              style={{ marginTop: '0', width: 'auto', minWidth: '120px' }}
+              value={selectedStaffId}
+              onChange={(e) => {
+                setSelectedStaffId(e.target.value);
+                if (e.target.value !== 'all') {
+                   setScheduleType('global');
+                }
+              }}
+            >
+              <option value="all">All Staff</option>
+              {staffMembers.map(staff => (
+                <option key={staff.id} value={staff.id}>{staff.name}</option>
+              ))}
+            </select>
+          </div>
+
           {canEdit && (
             <div className="view-selector" style={{ marginLeft: '12px' }}>
               <button 
@@ -303,7 +336,10 @@ function SchedulePage({ onMenuToggle }) {
               </button>
               <button 
                 className={`view-button ${scheduleType === 'personal' ? 'active' : ''}`}
-                onClick={() => setScheduleType('personal')}
+                onClick={() => {
+                  setScheduleType('personal');
+                  setSelectedStaffId('all');
+                }}
               >
                 Personal
               </button>

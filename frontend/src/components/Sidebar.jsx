@@ -54,7 +54,12 @@ function Sidebar({ isMobileMenuOpen, onLinkClick }) {
       </div>
 
       <nav className="nav">
-        <NavLink className="nav-item" to="/" end onClick={handleLinkClick}>
+        {isAdmin && (
+          <NavLink className="nav-item" to="/" end onClick={handleLinkClick}>
+            Service Health
+          </NavLink>
+        )}
+        <NavLink className="nav-item" to={isAdmin ? "/overview" : "/"} end={!isAdmin} onClick={handleLinkClick}>
           Dashboard
         </NavLink>
         <NavLink className="nav-item" to="/lessons" onClick={handleLinkClick}>
@@ -67,14 +72,9 @@ function Sidebar({ isMobileMenuOpen, onLinkClick }) {
           Progress
         </NavLink>
         {isAdmin && (
-          <>
-            <NavLink className="nav-item" to="/staff" onClick={handleLinkClick}>
-              Staff
-            </NavLink>
-            <NavLink className="nav-item" to="/health" onClick={handleLinkClick}>
-              Service Health
-            </NavLink>
-          </>
+          <NavLink className="nav-item" to="/staff" onClick={handleLinkClick}>
+            Staff
+          </NavLink>
         )}
       </nav>
 
@@ -105,7 +105,10 @@ function Sidebar({ isMobileMenuOpen, onLinkClick }) {
         </div>
 
         <button 
-          onClick={logout} 
+          onClick={() => {
+            logout();
+            navigate('/', { replace: true });
+          }} 
           style={{ 
             background: 'none', 
             border: '1px solid rgba(255,255,255,0.3)', 

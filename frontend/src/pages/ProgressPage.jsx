@@ -116,7 +116,17 @@ function ProgressPage({ onMenuToggle }) {
                         <span>{p.attendance}%</span>
                       </div>
                     </td>
-                    <td>{p.averageScore}</td>
+                    <td>
+                      <div className="attendance-cell">
+                        <div className="mini-bar-track">
+                          <div 
+                            className="mini-bar-fill" 
+                            style={{ width: `${p.averageScore}%` }}
+                          ></div>
+                        </div>
+                        <span>{p.averageScore}%</span>
+                      </div>
+                    </td>
                   </tr>
                 ))}
                 {pagedParticipants.length === 0 && (
