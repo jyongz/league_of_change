@@ -47,18 +47,15 @@ function ServiceHealthPage({ onMenuToggle }) {
           <div className="panel-header">
             <h3>Login Activity (Last 24h)</h3>
           </div>
-          <div style={{ padding: '24px', height: '200px', display: 'flex', alignItems: 'flex-end', gap: '8px' }}>
+          <div className="chart-container">
             {[45, 32, 67, 89, 120, 150, 210, 180, 140, 110, 95, 130].map((h, i) => (
-              <div key={i} style={{ 
-                flex: 1, 
-                backgroundColor: 'var(--color-brand)', 
+              <div key={i} className="chart-bar" style={{ 
                 height: `${(h / 210) * 100}%`,
-                borderRadius: '4px 4px 0 0',
                 opacity: 0.7 + (i * 0.02)
               }} title={`Hour ${i}: ${h} logins`}></div>
             ))}
           </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0 24px 16px', color: 'var(--color-text-muted)', fontSize: '12px' }}>
+          <div className="chart-labels">
             <span>00:00</span>
             <span>12:00</span>
             <span>23:59</span>
@@ -94,27 +91,27 @@ function ServiceHealthPage({ onMenuToggle }) {
         <div className="panel-header">
           <h3>Traffic Overview</h3>
         </div>
-        <div style={{ padding: '24px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', marginBottom: '16px' }}>
-            <div style={{ width: '120px', fontSize: '14px' }}>Hackney Hub</div>
-            <div style={{ flex: 1, height: '12px', backgroundColor: 'var(--color-bg)', borderRadius: '6px', overflow: 'hidden' }}>
-              <div style={{ width: '75%', height: '100%', backgroundColor: 'var(--color-brand)' }}></div>
+        <div className="panel-content">
+          <div className="traffic-row">
+            <div className="traffic-label">Hackney Hub</div>
+            <div className="traffic-bar-track">
+              <div className="traffic-bar-fill" style={{ width: '75%' }}></div>
             </div>
-            <div style={{ width: '40px', textAlign: 'right', fontSize: '12px', marginLeft: '12px' }}>75%</div>
+            <div className="traffic-value">75%</div>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', marginBottom: '16px' }}>
-            <div style={{ width: '120px', fontSize: '14px' }}>Brixton Studio</div>
-            <div style={{ flex: 1, height: '12px', backgroundColor: 'var(--color-bg)', borderRadius: '6px', overflow: 'hidden' }}>
-              <div style={{ width: '45%', height: '100%', backgroundColor: 'var(--color-brand)' }}></div>
+          <div className="traffic-row">
+            <div className="traffic-label">Brixton Studio</div>
+            <div className="traffic-bar-track">
+              <div className="traffic-bar-fill" style={{ width: '45%' }}></div>
             </div>
-            <div style={{ width: '40px', textAlign: 'right', fontSize: '12px', marginLeft: '12px' }}>45%</div>
+            <div className="traffic-value">45%</div>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <div style={{ width: '120px', fontSize: '14px' }}>Online Portal</div>
-            <div style={{ flex: 1, height: '12px', backgroundColor: 'var(--color-bg)', borderRadius: '6px', overflow: 'hidden' }}>
-              <div style={{ width: '92%', height: '100%', backgroundColor: 'var(--color-brand)' }}></div>
+          <div className="traffic-row">
+            <div className="traffic-label">Online Portal</div>
+            <div className="traffic-bar-track">
+              <div className="traffic-bar-fill" style={{ width: '92%' }}></div>
             </div>
-            <div style={{ width: '40px', textAlign: 'right', fontSize: '12px', marginLeft: '12px' }}>92%</div>
+            <div className="traffic-value">92%</div>
           </div>
         </div>
       </div>
